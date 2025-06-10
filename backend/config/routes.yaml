@@ -1,0 +1,4 @@
+# Import API routes
+api:
+    resource: './routes/api.yaml'
+    prefix: /

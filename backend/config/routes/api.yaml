@@ -1,0 +1,10 @@
+# Security routes
+api_login:
+    path: /api/login
+    controller: App\Controller\SecurityController::login
+    methods: [POST]
+
+api_register:
+    path: /api/register
+    controller: App\Controller\RegistrationController::register
+    methods: [POST]
