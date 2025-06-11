@@ -8,3 +8,18 @@ api_register:
     path: /api/register
     controller: App\Controller\RegistrationController::register
     methods: [POST]
+
+api_classes:
+    path: /api/classes
+    controller: App\Controller\GameDataController::getClasses
+    methods: [GET]
+
+api_races:
+    path: /api/races
+    controller: App\Controller\GameDataController::getRaces
+    methods: [GET]
+
+api_create_character:
+    path: /api/create-character
+    controller: App\Controller\CharacterController::createCharacter
+    methods: [POST]

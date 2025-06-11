@@ -26,6 +26,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $apiToken = null;
+
     /**
      * @var string The hashed password
      */
@@ -86,6 +89,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): static
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    public function generateApiToken(): static
+    {
+        $this->apiToken = bin2hex(random_bytes(32));
 
         return $this;
     }

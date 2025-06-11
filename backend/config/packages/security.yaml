@@ -1,7 +1,8 @@
 security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         app_user_provider:
             entity:
@@ -12,22 +13,26 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
             lazy: true
             provider: app_user_provider
+            custom_authenticator: App\Security\ApiTokenAuthenticator
             stateless: true
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
     access_control:
+        # Public routes
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api, roles: ROLE_USER }
+        - { path: ^/api/classes, roles: PUBLIC_ACCESS }
+        - { path: ^/api/races, roles: PUBLIC_ACCESS }
+        
+        # Protected routes
+        - { path: ^/api/create-character, roles: ROLE_PLAYER }
+        - { path: ^/api/, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_PLAYER: ROLE_USER
+        ROLE_ADMIN: ROLE_PLAYER
 
 when@test:
     security:

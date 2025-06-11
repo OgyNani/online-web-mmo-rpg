@@ -53,12 +53,22 @@ class RegistrationController extends AbstractController
         $user->setRoles(['ROLE_PLAYER']);
         $user->setIsActive(true);
 
+        // Generate API token for new user
+        $user->generateApiToken();
+        
         $entityManager->persist($user);
         $entityManager->flush();
 
         return $this->json([
+            'success' => true,
             'message' => 'User registered successfully',
-            'id' => $user->getId()
+            'token' => $user->getApiToken(),
+            'user' => [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'username' => $user->getUsername(),
+                'roles' => $user->getRoles()
+            ]
         ], Response::HTTP_CREATED);
     }
 }
