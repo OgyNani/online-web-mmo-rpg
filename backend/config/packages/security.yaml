@@ -28,6 +28,7 @@ security:
         - { path: ^/api/classes, roles: ROLE_PLAYER }
         - { path: ^/api/races, roles: ROLE_PLAYER }
         - { path: ^/api/create-character, roles: ROLE_PLAYER }
+        - { path: ^/api/user-characters/{id}, roles: ROLE_PLAYER }
         - { path: ^/api/, roles: ROLE_USER }
 
     role_hierarchy:

@@ -26,6 +26,14 @@ class CharacterController extends AbstractController
     public function createCharacter(Request $request): JsonResponse
     {
         try {
+            $user = $this->security->getUser();
+            if (!$user) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => 'User not authenticated'
+                ], 401);
+            }
+
             $data = json_decode($request->getContent(), true);
             
             if (!isset($data['name'], $data['classId'], $data['raceId'], $data['sex'])) {
@@ -43,14 +51,6 @@ class CharacterController extends AbstractController
                     'success' => false,
                     'error' => 'Character name is already taken'
                 ], 400);
-            }
-
-            $user = $this->security->getUser();
-            if (!$user) {
-                return new JsonResponse([
-                    'success' => false,
-                    'error' => 'User not authenticated'
-                ], 401);
             }
 
             $class = $this->entityManager->getRepository(CharacterClass::class)->find($data['classId']);

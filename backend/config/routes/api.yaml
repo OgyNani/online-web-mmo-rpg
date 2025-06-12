@@ -23,3 +23,8 @@ api_create_character:
     path: /api/create-character
     controller: App\Controller\CharacterController::createCharacter
     methods: [POST]
+
+api_user_characters:
+    path: /api/user-characters/{id}
+    controller: App\Controller\CharacterController::createCharacter
+    methods: [GET]
