@@ -14,7 +14,7 @@ class ClassBaseStats
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(targetEntity: CharacterClass::class)]
+    #[ORM\OneToOne(targetEntity: CharacterClass::class, inversedBy: 'stats')]
     #[ORM\JoinColumn(name: 'character_id', referencedColumnName: 'id', nullable: false)]
     private ?CharacterClass $characterClass = null;
 

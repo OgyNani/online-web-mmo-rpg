@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CharacterClassRepository;
+use App\Entity\ClassBaseStats;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CharacterClassRepository::class)]
@@ -17,6 +18,9 @@ class CharacterClass
     #[ORM\Column(length: 50, unique: true)]
     private ?string $name = null;
 
+    #[ORM\OneToOne(targetEntity: ClassBaseStats::class, mappedBy: 'characterClass')]
+    private ?ClassBaseStats $stats = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -30,6 +34,17 @@ class CharacterClass
     public function setName(string $name): static
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function getStats(): ?ClassBaseStats
+    {
+        return $this->stats;
+    }
+
+    public function setStats(?ClassBaseStats $stats): static
+    {
+        $this->stats = $stats;
         return $this;
     }
 }

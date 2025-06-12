@@ -23,10 +23,10 @@ security:
         # Public routes
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/classes, roles: PUBLIC_ACCESS }
-        - { path: ^/api/races, roles: PUBLIC_ACCESS }
         
         # Protected routes
+        - { path: ^/api/classes, roles: ROLE_PLAYER }
+        - { path: ^/api/races, roles: ROLE_PLAYER }
         - { path: ^/api/create-character, roles: ROLE_PLAYER }
         - { path: ^/api/, roles: ROLE_USER }
 
