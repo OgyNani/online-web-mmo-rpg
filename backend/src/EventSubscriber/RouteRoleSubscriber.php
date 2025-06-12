@@ -41,27 +41,23 @@ class RouteRoleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Публичные маршруты (не требуют авторизации)
         $publicRoutes = ['api_login', 'app_register'];
         if (in_array($method, $publicRoutes)) {
             return;
         }
 
-        // Проверяем, авторизован ли пользователь
         if (!$this->security->getUser()) {
             throw new AccessDeniedHttpException('Authentication required.');
         }
 
         $attributes = $reflectionMethod->getAttributes(RouteRole::class);
         if (empty($attributes)) {
-            // Если атрибут не указан, то доступ только для обычных игроков
             if (!$this->security->isGranted('ROLE_PLAYER')) {
                 throw new AccessDeniedHttpException('Access denied.');
             }
             return;
         }
 
-        // Проверяем роль из атрибута
         $routeRole = $attributes[0]->newInstance();
         if (!$this->security->isGranted($routeRole->role)) {
             throw new AccessDeniedHttpException('Access denied.');

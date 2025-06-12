@@ -17,14 +17,12 @@ class RegistrationController extends AbstractController
     ): Response {
         $data = json_decode($request->getContent(), true);
 
-        // Валидация данных
         if (!isset($data['email'], $data['password'], $data['username'])) {
             return $this->json([
                 'error' => 'Missing required fields'
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // Проверка существования email
         $existingUser = $entityManager->getRepository(User::class)->findOneBy([
             'email' => $data['email']
         ]);
@@ -35,7 +33,6 @@ class RegistrationController extends AbstractController
             ], Response::HTTP_CONFLICT);
         }
 
-        // Проверка существования username
         $existingUsername = $entityManager->getRepository(User::class)->findOneBy([
             'username' => $data['username']
         ]);
@@ -53,7 +50,6 @@ class RegistrationController extends AbstractController
         $user->setRoles(['ROLE_PLAYER']);
         $user->setIsActive(true);
 
-        // Generate API token for new user
         $user->generateApiToken();
         
         $entityManager->persist($user);

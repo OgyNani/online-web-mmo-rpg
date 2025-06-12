@@ -43,7 +43,6 @@ class SecurityController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Generate new API token
         $user->generateApiToken();
         $entityManager->flush();
 

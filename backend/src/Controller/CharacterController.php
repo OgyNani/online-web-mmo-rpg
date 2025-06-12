@@ -28,7 +28,6 @@ class CharacterController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
             
-            // Validate required fields
             if (!isset($data['name'], $data['classId'], $data['raceId'], $data['sex'])) {
                 return new JsonResponse([
                     'success' => false,
@@ -36,7 +35,6 @@ class CharacterController extends AbstractController
                 ], 400);
             }
 
-            // Check if name is already taken
             $existingCharacter = $this->entityManager->getRepository(UserCharacter::class)
                 ->findOneBy(['name' => $data['name']]);
             
@@ -47,7 +45,6 @@ class CharacterController extends AbstractController
                 ], 400);
             }
 
-            // Get the current user
             $user = $this->security->getUser();
             if (!$user) {
                 return new JsonResponse([
@@ -56,7 +53,6 @@ class CharacterController extends AbstractController
                 ], 401);
             }
 
-            // Get class and race entities
             $class = $this->entityManager->getRepository(CharacterClass::class)->find($data['classId']);
             $race = $this->entityManager->getRepository(Race::class)->find($data['raceId']);
 
@@ -67,7 +63,6 @@ class CharacterController extends AbstractController
                 ], 400);
             }
 
-            // Get base stats for the class
             $baseStats = $this->entityManager->getRepository(ClassBaseStats::class)
                 ->findOneBy(['characterClass' => $class]);
 
@@ -78,7 +73,6 @@ class CharacterController extends AbstractController
                 ], 500);
             }
 
-            // Create new character
             $character = new UserCharacter();
             $character->setUser($user);
             $character->setName($data['name']);
@@ -88,7 +82,6 @@ class CharacterController extends AbstractController
             $character->setLevel(1);
             $character->setExp(0);
             
-            // Set initial stats from class base stats
             $character->setCurrentHp($baseStats->getRawHp());
             $character->setHp($baseStats->getRawHp());
             $character->setDefence($baseStats->getRawDefence());
