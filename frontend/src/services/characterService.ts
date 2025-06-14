@@ -1,4 +1,4 @@
-import { CharacterClass, CharacterFormData, CharacterRace } from '../types/character';
+import { CharacterClass, CharacterFormData, CharacterRace, UserCharacter } from '../types/character';
 
 const API_URL = 'http://localhost:8000/api';
 
@@ -57,5 +57,27 @@ export const characterService = {
         if (!data.success) {
             throw new Error(data.error || 'Failed to create character');
         }
+    },
+
+    async getUserCharacters(): Promise<UserCharacter[]> {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('Not authenticated. Please log in.');
+        }
+
+        const response = await fetch(`${API_URL}/user-characters`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const data = await response.json();
+        
+        if (!data.success) {
+            throw new Error(data.error || 'Failed to load characters');
+        }
+
+        return Object.values(data.characters);
     }
 };

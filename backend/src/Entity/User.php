@@ -17,6 +17,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?UserVault $vault = null;
+
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -142,6 +145,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): static
     {
         $this->username = $username;
+        return $this;
+    }
+
+    public function getVault(): ?UserVault
+    {
+        return $this->vault;
+    }
+
+    public function setVault(UserVault $vault): self
+    {
+        if ($vault->getUser() !== $this) {
+            $vault->setUser($this);
+        }
+
+        $this->vault = $vault;
         return $this;
     }
 

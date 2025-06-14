@@ -14,6 +14,9 @@ class UserCharacter
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\OneToOne(mappedBy: 'character', cascade: ['persist', 'remove'])]
+    private ?CharacterEquipment $equipment = null;
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $user = null;
@@ -52,6 +55,9 @@ class UserCharacter
 
     #[ORM\Column]
     private int $luck;
+
+    #[ORM\Column]
+    private int $speed;
 
     public function getId(): ?int
     {
@@ -187,6 +193,32 @@ class UserCharacter
     public function setLuck(int $luck): self
     {
         $this->luck = $luck;
+        return $this;
+    }
+
+    public function getSpeed(): ?int
+    {
+        return $this->speed;
+    }
+
+    public function setSpeed(int $speed): self
+    {
+        $this->speed = $speed;
+        return $this;
+    }
+
+    public function getEquipment(): ?CharacterEquipment
+    {
+        return $this->equipment;
+    }
+
+    public function setEquipment(CharacterEquipment $equipment): self
+    {
+        if ($equipment->getCharacter() !== $this) {
+            $equipment->setCharacter($this);
+        }
+
+        $this->equipment = $equipment;
         return $this;
     }
 }

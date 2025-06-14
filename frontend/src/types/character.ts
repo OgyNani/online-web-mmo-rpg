@@ -27,3 +27,17 @@ export interface CharacterRace {
     name: string;
     description: string;
 }
+
+export interface UserCharacter {
+    id: number | null;
+    name: string;
+    class: string;
+    level: number;
+    stats?: {
+        hp: number;
+        currentHp: number;
+        defence: number;
+        attack: number;
+        luck: number;
+    };
+}

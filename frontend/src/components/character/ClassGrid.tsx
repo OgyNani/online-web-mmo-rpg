@@ -1,6 +1,6 @@
 import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
 import { CharacterClass } from '../../types/character';
+import { Row, Col } from 'react-bootstrap';
 import './styles.css';
 
 interface ClassGridProps {
@@ -9,32 +9,24 @@ interface ClassGridProps {
     onSelectClass: (classId: number) => void;
 }
 
-export const ClassGrid: React.FC<ClassGridProps> = ({ 
-    classes, 
-    selectedClassId, 
-    onSelectClass 
-}) => {
+export const ClassGrid: React.FC<ClassGridProps> = ({ classes, selectedClassId, onSelectClass }) => {
     return (
-        <div className="class-grid">
-            {classes.map(characterClass => (
-                <div 
-                    key={characterClass.id}
-                    className={`class-card ${selectedClassId === characterClass.id ? 'selected' : ''}`}
-                    onClick={() => onSelectClass(characterClass.id)}
-                >
-                    <div className="class-icon">
-                        {characterClass.iconUrl ? (
-                            <img 
-                                src={characterClass.iconUrl} 
-                                alt={characterClass.name}
-                            />
-                        ) : (
-                            <div className="placeholder-icon">{characterClass.name[0]}</div>
-                        )}
+        <Row className="g-3">
+            {classes.map((characterClass) => (
+                <Col xs={6} sm={4} md={3} key={characterClass.id}>
+                    <div
+                        className={`class-card ${selectedClassId === characterClass.id ? 'selected' : ''}`}
+                        onClick={() => onSelectClass(characterClass.id)}
+                    >
+                        <div className="class-icon">
+                            {characterClass.name[0]}
+                        </div>
+                        <div className="class-name">
+                            {characterClass.name}
+                        </div>
                     </div>
-                    <div className="class-name">{characterClass.name}</div>
-                </div>
+                </Col>
             ))}
-        </div>
+        </Row>
     );
 };

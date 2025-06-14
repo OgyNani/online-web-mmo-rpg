@@ -14,6 +14,12 @@ class ClassBaseStats
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column]
+    private ?int $rawSpeed = null;
+
+    #[ORM\Column]
+    private ?int $maxRawSpeed = null;
+
     #[ORM\OneToOne(targetEntity: CharacterClass::class, inversedBy: 'stats')]
     #[ORM\JoinColumn(name: 'character_id', referencedColumnName: 'id', nullable: false)]
     private ?CharacterClass $characterClass = null;
@@ -99,6 +105,17 @@ class ClassBaseStats
     public function setRawLuck(int $rawLuck): self
     {
         $this->rawLuck = $rawLuck;
+        return $this;
+    }
+
+    public function getRawSpeed(): ?int
+    {
+        return $this->rawSpeed;
+    }
+
+    public function setRawSpeed(int $rawSpeed): self
+    {
+        $this->rawSpeed = $rawSpeed;
         return $this;
     }
 

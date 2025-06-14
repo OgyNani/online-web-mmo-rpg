@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 
-class CharacterController extends AbstractController
+class UserCharacterController extends AbstractController
 {
     private $entityManager;
     private $security;
@@ -31,17 +31,8 @@ class CharacterController extends AbstractController
                 ], 401);
             }
 
-            $data = json_decode($request->getContent(), true);
-
-            if (!isset($data['user_id'])) {
-                return new JsonResponse([
-                    'success' => false,
-                    'error' => 'Missing required fields'
-                ], 400);
-            }
-
             $userCharacters = $this->entityManager->getRepository(UserCharacter::class)
-                ->findBy(['user' => $data['user_id']]);
+                ->findBy(['user' => $user]);
 
             $characters = [];
 
