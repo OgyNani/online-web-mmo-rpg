@@ -75,25 +75,21 @@ class CharacterClassWithStatsFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         foreach (self::CLASSES as $className => $stats) {
-            // Check if class already exists
             $existingClass = $manager->getRepository(CharacterClass::class)->findOneBy(['name' => $className]);
             
             if (!$existingClass) {
-                // Create new class if it doesn't exist
                 $class = new CharacterClass();
                 $class->setName($className);
                 $manager->persist($class);
-                $manager->flush(); // Flush to get the ID
+                $manager->flush();
             } else {
                 $class = $existingClass;
             }
 
-            // Check if stats exist for this class
             $existingStats = $manager->getRepository(ClassBaseStats::class)
                 ->findOneBy(['characterClass' => $class]);
 
             if (!$existingStats) {
-                // Create new stats if they don't exist
                 $baseStats = new ClassBaseStats();
                 $baseStats->setCharacterClass($class);
                 $baseStats->setRawHp($stats['raw_hp']);

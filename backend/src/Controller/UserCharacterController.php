@@ -43,19 +43,26 @@ class UserCharacterController extends AbstractController
                     'race' => $character->getRace()->getName(),
                     'sex' => $character->getSex(),
                     'level' => $character->getLevel(),
+                    'status' => $character->getStatus(),
+                    'location' => $character->getCurrentLocation(),
                     'stats' => [
                         'hp' => $character->getHp(),
                         'currentHp' => $character->getCurrentHp(),
                         'defence' => $character->getDefence(),
                         'attack' => $character->getAttack(),
-                        'luck' => $character->getLuck()
+                        'luck' => $character->getLuck(),
+                        'speed' => $character->getSpeed()
                     ]
                 ];
             }
                 
+            $characterCount = count($userCharacters);
             return new JsonResponse([
                 'success' => true,
-                'characters' => $characters
+                'characters' => $characters,
+                'availableSlots' => $user->getAvailableCharSlots(),
+                'characterCount' => $characterCount,
+                'canCreateCharacter' => $characterCount < $user->getAvailableCharSlots()
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([

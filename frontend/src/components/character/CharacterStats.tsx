@@ -45,6 +45,11 @@ export const StatsTable: React.FC<StatsTableProps> = ({ baseStats, maxStats }) =
                         <td>{baseStats.wisdom}</td>
                         <td>{maxStats.wisdom}</td>
                     </tr>
+                    <tr>
+                        <td>Speed</td>
+                        <td>{baseStats.speed}</td>
+                        <td>{maxStats.speed}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

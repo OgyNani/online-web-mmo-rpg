@@ -11,25 +11,16 @@ export const MenuPage = () => {
     const navigate = useNavigate();
     const { logout, user } = useAuth();
     const [selectedCharacter, setSelectedCharacter] = useState<UserCharacter | null>(null);
-    const [characters, setCharacters] = useState<UserCharacter[]>([
-        // Placeholder empty slots
-        { id: null, name: '', class: '', level: 1 },
-        { id: null, name: '', class: '', level: 1 },
-        { id: null, name: '', class: '', level: 1 },
-        { id: null, name: '', class: '', level: 1 },
-        { id: null, name: '', class: '', level: 1 },
-        { id: null, name: '', class: '', level: 1 },
-        { id: null, name: '', class: '', level: 1 },
-        { id: null, name: '', class: '', level: 1 },
-    ]);
+    const [characters, setCharacters] = useState<UserCharacter[]>([]);
+    const [canCreateCharacter, setCanCreateCharacter] = useState(true);
 
     useEffect(() => {
         const fetchCharacters = async () => {
             try {
-                const userCharacters = await characterService.getUserCharacters();
+                const { characters: userCharacters, availableSlots, canCreateCharacter } = await characterService.getUserCharacters();
+                setCanCreateCharacter(canCreateCharacter);
                 console.log('Loaded characters:', userCharacters);
-                // Fill remaining slots with empty characters
-                const emptySlots = Array(8 - userCharacters.length).fill({ id: null, name: '', class: '', level: 1 });
+                const emptySlots = Array(availableSlots - userCharacters.length).fill({ id: null, name: '', class: '', level: 1 });
                 const allSlots = [...userCharacters, ...emptySlots];
                 console.log('All slots:', allSlots);
                 setCharacters(allSlots);
@@ -54,11 +45,9 @@ export const MenuPage = () => {
         console.log('Character clicked:', character);
         
         if (character.name === '') {
-            // Empty slot
             console.log('Empty slot, navigating to create');
             navigate('/create-character');
         } else {
-            // Existing character
             console.log('Existing character selected:', character);
             setSelectedCharacter(character);
         }
@@ -93,7 +82,14 @@ export const MenuPage = () => {
                             >
                                 Play
                             </Button>
-                            <Button variant="info" onClick={handleCreateCharacter}>Create Character</Button>
+                            <Button 
+                                variant="info" 
+                                onClick={handleCreateCharacter}
+                                disabled={!canCreateCharacter}
+                                title={!canCreateCharacter ? 'Maximum character limit reached' : 'Create a new character'}
+                            >
+                                Create Character
+                            </Button>
                         </div>
                     </Col>
                 </Row>

@@ -59,7 +59,12 @@ export const characterService = {
         }
     },
 
-    async getUserCharacters(): Promise<UserCharacter[]> {
+    async getUserCharacters(): Promise<{ 
+        characters: UserCharacter[], 
+        availableSlots: number,
+        characterCount: number,
+        canCreateCharacter: boolean
+    }> {
         const token = localStorage.getItem('token');
         if (!token) {
             throw new Error('Not authenticated. Please log in.');
@@ -78,6 +83,11 @@ export const characterService = {
             throw new Error(data.error || 'Failed to load characters');
         }
 
-        return Object.values(data.characters);
+        return {
+            characters: Object.values(data.characters),
+            availableSlots: data.availableSlots,
+            characterCount: data.characterCount,
+            canCreateCharacter: data.canCreateCharacter
+        };
     }
 };

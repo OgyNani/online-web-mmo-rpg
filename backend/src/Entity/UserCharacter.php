@@ -59,6 +59,14 @@ class UserCharacter
     #[ORM\Column]
     private int $speed;
 
+    #[ORM\ManyToOne(targetEntity: CharacterStatus::class)]
+    #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id', nullable: false)]
+    private ?CharacterStatus $status = null;
+
+    #[ORM\ManyToOne(targetEntity: Location::class)]
+    #[ORM\JoinColumn(name: 'current_location_id', referencedColumnName: 'id', nullable: false)]
+    private ?Location $currentLocation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -204,6 +212,28 @@ class UserCharacter
     public function setSpeed(int $speed): self
     {
         $this->speed = $speed;
+        return $this;
+    }
+
+    public function getStatus(): ?CharacterStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?CharacterStatus $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function getCurrentLocation(): ?Location
+    {
+        return $this->currentLocation;
+    }
+
+    public function setCurrentLocation(?Location $location): self
+    {
+        $this->currentLocation = $location;
         return $this;
     }
 

@@ -19,7 +19,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<any | null>(null);
 
   useEffect(() => {
-    // Check if token and user exist on mount
     const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
     setIsAuthenticated(!!token);

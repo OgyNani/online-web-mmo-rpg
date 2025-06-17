@@ -37,7 +37,6 @@ class ApiTokenAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
 
-        // Remove 'Bearer ' prefix if present
         $apiToken = str_replace('Bearer ', '', $apiToken);
 
         return new SelfValidatingPassport(

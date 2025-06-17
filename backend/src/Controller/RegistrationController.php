@@ -3,13 +3,23 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\AccountStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 class RegistrationController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function register(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
@@ -43,12 +53,24 @@ class RegistrationController extends AbstractController
             ], Response::HTTP_CONFLICT);
         }
 
+        $activeStatus = $this->entityManager->getRepository(AccountStatus::class)
+            ->findOneBy(['status' => 'active']);
+
+        if (!$activeStatus) {
+            return $this->json([
+                'success' => false,
+                'error' => 'Account status "active" not found'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         $user = new User();
         $user->setEmail($data['email']);
         $user->setUsername($data['username']);
         $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
         $user->setRoles(['ROLE_PLAYER']);
         $user->setIsActive(true);
+        $user->setStatus($activeStatus);
+        $user->setAvailableCharSlots(1);
 
         $user->generateApiToken();
         

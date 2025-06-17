@@ -11,6 +11,7 @@ export interface CharacterStats {
     intelligence: number;
     vitality: number;
     wisdom: number;
+    speed: number;
 }
 
 export interface CharacterClass {
@@ -39,5 +40,6 @@ export interface UserCharacter {
         defence: number;
         attack: number;
         luck: number;
+        speed: number;
     };
 }

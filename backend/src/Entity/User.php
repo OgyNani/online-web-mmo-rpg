@@ -39,7 +39,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?bool $isActive = true;
+    private bool $isActive = false;
+
+    #[ORM\Column]
+    private int $availableCharSlots = 1;
+
+    #[ORM\ManyToOne(targetEntity: AccountStatus::class)]
+    #[ORM\JoinColumn(name: 'status_id', referencedColumnName: 'id', nullable: false)]
+    private ?AccountStatus $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -171,6 +178,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+        return $this;
+    }
+
+    public function getStatus(): ?AccountStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?AccountStatus $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function getAvailableCharSlots(): int
+    {
+        return $this->availableCharSlots;
+    }
+
+    public function setAvailableCharSlots(int $slots): self
+    {
+        $this->availableCharSlots = $slots;
         return $this;
     }
 

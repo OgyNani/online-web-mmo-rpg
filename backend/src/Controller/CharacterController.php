@@ -6,6 +6,8 @@ use App\Entity\UserCharacter;
 use App\Entity\CharacterClass;
 use App\Entity\Race;
 use App\Entity\ClassBaseStats;
+use App\Entity\CharacterStatus;
+use App\Entity\Location;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -66,10 +68,30 @@ class CharacterController extends AbstractController
             $baseStats = $this->entityManager->getRepository(ClassBaseStats::class)
                 ->findOneBy(['characterClass' => $class]);
 
-            if (!$baseStats) {
+            $aliveStatus = $this->entityManager->getRepository(CharacterStatus::class)
+                ->findOneBy(['status' => 'alive']);
+
+            $startLocation = $this->entityManager->getRepository(Location::class)
+                ->findOneBy(['name' => 'Eldermarch']);
+
+            if (!$baseStats || !$aliveStatus || !$startLocation) {
                 return new JsonResponse([
                     'success' => false,
                     'error' => 'Class base stats not found'
+                ], 500);
+            }
+
+            if (!$aliveStatus) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => 'Character status "alive" not found'
+                ], 500);
+            }
+
+            if (!$startLocation) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => 'Starting location "Eldermarch" not found'
                 ], 500);
             }
 
@@ -87,6 +109,9 @@ class CharacterController extends AbstractController
             $character->setDefence($baseStats->getRawDefence());
             $character->setAttack($baseStats->getRawAttack());
             $character->setLuck($baseStats->getRawLuck());
+            $character->setSpeed($baseStats->getRawSpeed());
+            $character->setStatus($aliveStatus);
+            $character->setCurrentLocation($startLocation);
 
             $this->entityManager->persist($character);
             $this->entityManager->flush();
@@ -101,12 +126,15 @@ class CharacterController extends AbstractController
                     'race' => $character->getRace()->getName(),
                     'sex' => $character->getSex(),
                     'level' => $character->getLevel(),
+                    'status' => $character->getStatus(),
+                    'location' => $character->getCurrentLocation(),
                     'stats' => [
                         'hp' => $character->getHp(),
                         'currentHp' => $character->getCurrentHp(),
                         'defence' => $character->getDefence(),
                         'attack' => $character->getAttack(),
-                        'luck' => $character->getLuck()
+                        'luck' => $character->getLuck(),
+                        'speed' => $character->getSpeed()
                     ]
                 ]
             ]);
