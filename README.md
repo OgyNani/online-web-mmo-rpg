@@ -7,7 +7,7 @@
 
 A text-based MMO RPG game where players can embark on epic adventures, interact with other players, and explore a rich fantasy world through text-based interactions.
 
-## 🎮 Game Features
+## 🎮 Game Features (PLAN)
 
 - **Character Creation & Progression**
   - Unique character creation system
@@ -96,25 +96,3 @@ php -S localhost:8000 -t public
 # Frontend (from frontend directory)
 npm start
 ```
-
-## 📝 API Documentation
-
-### Authentication Endpoints
-
-- **POST** `/api/register`
-  - Register a new user
-  - Required fields: email, password, username
-
-- **POST** `/api/login`
-  - Authenticate user
-  - Required fields: email, password
-
-*More endpoints will be documented as they are developed*
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
-
-## 📜 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
